@@ -31,7 +31,7 @@ class Blog(db.Model):
 class MainHandler(Handler):
 
     def render_blog(self, title="", entry="", error=""):
-        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC")
+        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5")
 
         self.render('newpost.html', title=title, entry=entry, error=error, blogs=blogs)
 
