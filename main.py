@@ -28,16 +28,9 @@ class Blog(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
 
 
-class MainHandler(Handler):
-
-    def render_blog(self, title="", entry="", error=""):
-        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5")
-
-        self.render('newpost.html', title=title, entry=entry, error=error, blogs=blogs)
-
-
+class NewPost(Handler):
     def get(self):
-        self.render_blog()
+        self.render('newpost.html')
 
 
     def post(self):
@@ -53,7 +46,22 @@ class MainHandler(Handler):
 
         else:
             error = "Your new blog post needs a title and an entry!"
-            self.render_blog(title, entry, error)
+            self.render('newpost.html', title=title, entry=entry, error=error)
+
+
+class MainHandler(Handler):
+
+    def render_blog(self, title="", entry="", error=""):
+        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5")
+
+        self.render('main.html', title=title, entry=entry, error=error, blogs=blogs)
+
+
+    def get(self):
+        self.render_blog()
+
+
+
 
 
 
@@ -63,5 +71,6 @@ class MainHandler(Handler):
 
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/newpost', NewPost),
 ], debug=True)

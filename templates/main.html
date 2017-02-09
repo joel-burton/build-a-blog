@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+
+{% block content%}
+
+<h2>Recent Entries</h2>
+
+<hr>
+
+{% for blog in blogs %}
+    <div class="blog">
+        <h3 class="blog-title">{{ blog.title }}</h3>
+        <p class="blog-entry">{{ blog.entry }}</p>
+    </div>
+    <hr>
+{% endfor %}
+
+{% endblock %}
