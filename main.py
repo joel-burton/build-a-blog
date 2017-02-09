@@ -28,6 +28,13 @@ class MainHandler(Handler):
     def get(self):
         self.render('base.html')
 
+
+
+
+
+
+        
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
 ], debug=True)
