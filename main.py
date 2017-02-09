@@ -26,14 +26,14 @@ class Handler(webapp2.RequestHandler):
 
 class MainHandler(Handler):
     def get(self):
-        self.render('base.html')
+        self.render('newpost.html')
 
 
 
 
 
 
-        
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
