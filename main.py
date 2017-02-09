@@ -22,24 +22,38 @@ class Handler(webapp2.RequestHandler):
         self.write(self.render_str(template, **kw))
 
 
+class Blog(db.Model):
+    title = db.StringProperty(required=True)
+    entry = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add=True)
 
 
 class MainHandler(Handler):
+
+    def render_blog(self, title="", entry="", error=""):
+        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC")
+
+        self.render('newpost.html', title=title, entry=entry, error=error, blogs=blogs)
+
+
     def get(self):
-        self.render('newpost.html')
+        self.render_blog()
+
 
     def post(self):
         title = self.request.get('title')
         entry = self.request.get('entry')
-        error = ""
 
 
         if title and entry:
+            b = Blog(title = title, entry = entry)
+            b.put()
+
             self.redirect('/')
 
         else:
             error = "Your new blog post needs a title and an entry!"
-            self.render('newpost.html', title=title, entry=entry, error=error)
+            self.render_blog(title, entry, error)
 
 
 
