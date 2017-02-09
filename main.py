@@ -28,6 +28,12 @@ class MainHandler(Handler):
     def get(self):
         self.render('newpost.html')
 
+    def post(self):
+        title = self.request.get('title')
+        entry = self.request.get('entry')
+    
+        self.render('newpost.html')
+
 
 
 
