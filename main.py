@@ -31,8 +31,15 @@ class MainHandler(Handler):
     def post(self):
         title = self.request.get('title')
         entry = self.request.get('entry')
-    
-        self.render('newpost.html')
+        error = ""
+
+
+        if title and entry:
+            self.redirect('/')
+
+        else:
+            error = "Your new blog post needs a title and an entry!"
+            self.render('newpost.html', title=title, entry=entry, error=error)
 
 
 
