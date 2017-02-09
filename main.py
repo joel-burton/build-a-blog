@@ -28,25 +28,7 @@ class Blog(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
 
 
-class NewPost(Handler):
-    def get(self):
-        self.render('newpost.html')
 
-
-    def post(self):
-        title = self.request.get('title')
-        entry = self.request.get('entry')
-
-
-        if title and entry:
-            b = Blog(title = title, entry = entry)
-            b.put()
-
-            self.redirect('/')
-
-        else:
-            error = "Your new blog post needs a title and an entry!"
-            self.render('newpost.html', title=title, entry=entry, error=error)
 
 
 class MainHandler(Handler):
@@ -62,7 +44,33 @@ class MainHandler(Handler):
 
 
 
+class NewPostHandler(Handler):
+    def get(self):
+        self.render('newpost.html')
 
+
+    def post(self):
+        title = self.request.get('title')
+        entry = self.request.get('entry')
+
+
+        if title and entry:
+            b = Blog(title = title, entry = entry)
+            b.put()
+            blog_id = str(b.key().id())
+
+            self.redirect('/blog/' + blog_id)
+
+        else:
+            error = "Your new blog post needs a title and an entry!"
+            self.render('newpost.html', title=title, entry=entry, error=error)
+
+
+
+class ViewPostHandler(Handler):
+    def get(self, id):
+        blog = Blog.get_by_id(int(id))
+        self.render('viewpost.html', blog=blog)
 
 
 
@@ -72,5 +80,6 @@ class MainHandler(Handler):
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/newpost', NewPost),
+    ('/newpost', NewPostHandler),
+    webapp2.Route('/blog/<id:\d+>', ViewPostHandler),
 ], debug=True)
