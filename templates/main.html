@@ -8,11 +8,17 @@
 <hr>
 
 {% for blog in blogs %}
+
+    {% set id = blog.key().id() %}
     <div class="blog">
-        <h3 class="blog-title">{{ blog.title }}</h3>
+        <a href="/blog/{{ id }}"><h3 class="blog-title">{{ blog.title }}</h3></a>
         <p class="blog-entry">{{ blog.entry }}</p>
     </div>
     <hr>
+
 {% endfor %}
+
+
+
 
 {% endblock %}
